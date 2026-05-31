@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Quiet Room — A Journal for Introverts</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:     #1C1A24;
+  --dusk:    #2D294;
+  --fog:     #E8E4F0;
+  --mist:    #F4F2F9;
+  --lavend:  #9B8DB8;
+  --lilac:   #C4B8DC;
+  --sage:    #8EA899;
+  --parch:   #FAF8F4;
+  --warm:    #EDE8E0;
+  --rust:    #B06B4A;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--parch);
+  color: var(--ink);
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='00 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+/* Star fild */
+.stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.star {
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+  animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s);
+}
+@keyframes twinkle {
+  0%, 100% { opacity: var(--lo, 0.1); }
+  50%       { opacity: var(--hi, 0.6); }
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32px 60px;
+  position: relative;
+  z-index: 10;
+}
+
+.nav-logo {
+  font-family: 'Cormorant Gramond', serif;
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: var(--lilac);
+  text-transform: uppercase;
+}
+
+.nav-cta {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  padding-bottom: 3px;
+  transition: color 0.3s, border-color 0.3s;
+}
+.nav-cta:hover { color: var(--lilac); border-color: var(--lilac); }
+
+.hero-body {
+  display: flex;
+  align-item: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 60px 40px 100px;
+  position: relative;
+  z-index: 5;
+}
+
+/* Glowing orb */
+.orb {
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(155,141,184,0.18) 0%, rgba(155,141,184,0.06) 40%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -60%);
+  pointer-events: none;
+  animation: breathe 7s ease-in-out infinite;
+}
+@keyframes brethe {
+  0%, 100% { transform: translate(-50%, -60%) scale(1); opacity: 0.8; }
+  50%       { transform: translate(-50%, -60%) scale(1.12); opacity: 1; }
+}
+
+.hero-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: rise 1s ease 0.3s forwards;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(54px, 8vw, 110px);
+  font-weight: 300;
+  line-height: 0.95;
+  color: #fff;
+  letter-pacing: -0.01em;
+  margin-bottom: 12px;
+  opacity: 0;
+  animation: rise 1s ease 0.5s forwards;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--lilac);
+  display: block;
+}
+
+.hero-tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(18px, 2.5vw, 26px);
+  font-style: italic;
+  font-weight: 300;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 60px;
+  max-width: 480px;
+  line-height: 1.6;
+  opacity: 0;
+  animation: rise 1s ease 0.7s forwards;
+}
+
+/* PDF mockup */
+.pdf-wrap {
+  magin-bottom: 60px;
+  opacity: 0;
+  animation: riseFloat 1.2s ease 0.9s forwards;
+  position: relative;
+}
+
+@keyframes riseFloat {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.pdf-float {
+  animation: floatY 6s ease-in-out 2s infinite;
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+
+.pdf-shadow {
+  position: absolute;
+  bottom: -20px; left: 50%;
+  transform: translateX(-50%);
+  width:160px; height: 20px;
+  background: radial-gradient(ellipse, rgba(155,141,184,0.3) 0%, transparent 70%);
+  animation: shadowPulse 6s ease-in-out 2s infinite;
+}
+@keyframes shadowPulse {
+  0%, 100% { opacity: 0.8; transform: translateX(-50%) scaleX(1); }
+  50%       { opacity: 0.4; transform: translateX(-50%) scaleX(0.8); }
+}
+
+.pdf-page {
+  width: 200px;
+  height: 260px;
+  background: linear-gradient(160deg, #2D2940 0%, #1C1A24 60%, #161320 100%);
+  border-radius: 3px 8px 8px 3px;
+  display: flex;
+  flex-drection: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 24px;
+  position: relative;
+  box-shadow:
+    8px 12px 40px rgba(0,0,0,0.6),
+    2px 0 0 rgba(255,255,255,0.04) inset,
+    -2px 0 8px rgba(0,0,0,0.4) inset;
+}
+
+.pdf-spine {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 8px;
+  background: linear-gradient(to right, #0f0d18, #2D2940);
+  border-radius: 3px 0 0 3px;
+}
+
+.pdf-moon {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(155,141184,0.4);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 18px;
+  position: relative;
+}
+.pdf-moon::before {
+  content: '';
+  position: absolute;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: -6px 0 0 var(--lavend);
+}
+
+.pdf-title-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 300;
+  color: #fff;
+  text-align: center;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.pdf-sub-text {
+  font-size: px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--lavend);
+  text-align: center;
+  opacity: 0.7;
+}
+
+.pdf-lines {
+  position: absolute;
+  bottom: 24px;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.pdf-line {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 1px;
+}
+.pdf-line:last-child { width: 60%; }
+
+/* Pages behind effect */
+.pdf-page-back {
+  position: absolute;
+  width: 200px; height: 260px;
+  background: #252235;
+  border-radius: px 8px 8px 3px;
+  top: 3px; right: -5px;
+  z-index: -1;
+  box-shadow: 4px 4px 16px rgba(0,0,0,0.4);
+}
+.pdf-page-back2 {
+  position: absolute;
+  width: 200px; height: 260px;
+  background: #1e1c2d;
+  border-radius: 3px 8px 8px 3px;
+  top: 6px; right: -10px;
+  z-index: -2;
+  box-shadow: 4px 4px 16px rgba(0,0,0,0.3);
+}
+
+.hero-buy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: 1px solid rgba(155,141,184,0.4);
+  color: var(--lilac);
+  text-decoration: noe;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  padding: 16px 40px;
+  border-radius: 2px;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+  opacity: 0;
+  animation: rise 1s ease 1.2s forwards;
+}
+.hero-buy-btn:hover {
+  background: rgba(155,141,184,0.15);
+  border-color: var(--lilac);
+  color: #fff;
+}
+
+.hero-note {
+  margin-top: 16px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.2);
+  opacity: 0;
+  animation: rise s ease 1.4s forwards;
+}
+
+/* ── SCROLL INDICATOR ── */
+.scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+  opacity: 0;
+  animation: rise 1s ease 1.8s forwards;
+}
+.scroll-hint span {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+}
+.scroll-line {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to botom, rgba(155,141,184,0.4), transparent);
+  animation: scrollDrop 2s ease-in-out 2s infinite;
+}
+@keyframes scrollDrop {
+  0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+  50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+  51%  { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+  100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+
+/* ── WHO THIS IS FOR ── */
+.for-you {
+  background: var(--mist);
+  padding: 120px 60px;
+  position: relativ;
+  overflow: hidden;
+}
+
+.for-you::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(155,141,184,0.1) 0%, transparent 70%);
+}
+
+.section-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--lavend);
+  display: block;
+  margin-bottom: 20px;
+}
+
+.for-you-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1r 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.for-you-text h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 4vw, 54px);
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 28px;
+}
+
+.for-you-text h2 em {
+  font-style: italic;
+  color: var(--lavend);
+}
+
+.for-you-text p {
+  font-size: 16px;
+  line-height: 1.85;
+  color: #5A5570;
+  margin-bottom: 20px;
+}
+
+.traits {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.trait {
+  display: flex;
+  align-iems: flex-start;
+  gap: 14px;
+  padding: 16px 20px;
+  background: rgba(155,141,184,0.07);
+  border-radius: 2px;
+  border-left: 2px solid rgba(155,141,184,0.25);
+  transition: background 0.2s, border-color 0.2s;
+  cursor: default;
+}
+
+.trait:hover {
+  background: rgba(155,141,184,0.13);
+  border-color: var(--lavend);
+}
+
+.trait-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--lavend);
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+
+.trait p {
+  font-size: 14px;
+  line-height: 1.6;
+  color #5A5570;
+  margin: 0;
+}
+
+/* ── PROMPTS PREVIEW ── */
+.prompts {
+  background: var(--ink);
+  padding: 120px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.prompts::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--lavend), transparent);
+  opacity: 0.3;
+}
+
+.prompts-inner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.prompts-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.prompts-header h2 {
+  ont-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.15;
+}
+
+.prompts-header h2 em { font-style: italic; color: var(--lilac); }
+
+.prompts-header p {
+  margin-top: 16px;
+  font-size: 15px;
+  color: rgba(255,255,255,0.4);
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.7;
+}
+
+.prompts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.prompt-card {
+  background: rgba(25,255,255,0.04);
+  border: 1px solid rgba(155,141,184,0.12);
+  border-radius: 4px;
+  padding: 32px 24px;
+  position: relative;
+  transition: background 0.3s, border-color 0.3s, transform 0.3s;
+  cursor: default;
+}
+
+.prompt-card:hover {
+  background: rgba(155,141,184,0.08);
+  border-color: rgba(155,141,184,0.3);
+  transform: translateY(-4px);
+}
+
+.prompt-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 42px;
+  font-weight: 300;
+  color: rgba(155,141,184,0.15);
+  position: absolute;
+  top: 12px right: 20px;
+  line-height: 1;
+}
+
+.prompt-section {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 14px;
+  display: block;
+}
+
+.prompt-q {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 300;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.4;
+}
+
+/* ── WHAT'S INSIDE ── */
+.inside {
+  background: var(--parch);
+  padding: 120px 60px;
+}
+
+.inside-inner {
+  max-width: 960px;
+  margin: 0 auto;}
+
+.inside-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  margin-bottom: 64px;
+  align-items: end;
+}
+
+.inside-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 4vw, 54px);
+  font-weight: 300;
+  line-height: 1.15;
+}
+
+.inside-header h2 em { font-style: italic; color: var(--rust); }
+
+.inside-header p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #6A6480;
+}
+
+.chapters-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3px;
+}
+.chapter {
+  display: flex;
+  gap: 20px;
+  padding: 28px 24px;
+  background: var(--warm);
+  transition: background 0.2s;
+  cursor: default;
+  align-items: flex-start;
+}
+
+.chapter:hover { background: var(--fog); }
+
+.ch-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--lilac);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.ch-info strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 4px;
+  letter-spacing: 0.0em;
+}
+
+.ch-info span {
+  font-size: 13px;
+  color: #7A7390;
+  line-height: 1.5;
+}
+
+/* ── TESTIMONIAL ── */
+.testi-solo {
+  background: var(--dusk);
+  padding: 100px 60px;
+  text-align: center;
+}
+
+.testi-solo blockquote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.5;
+  max-width: 700px;
+  margin: 0 auto 40px;
+}
+
+.testi-solo blockquote::before { content: '\201C'; color: var(--laend); }
+.testi-solo blockquote::after  { content: '\201D'; color: var(--lavend); }
+
+.testi-trio {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+  margin-top: 64px;
+}
+
+.testi-mini {
+  max-width: 260px;
+  text-align: left;
+  border-left: 2px solid rgba(155,141,184,0.3);
+  padding-left: 20px;
+}
+
+.testi-mini p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 14px;
+}
+
+.testi-mini cite {
+  font-size: 12px;
+  color: var(--lavend);
+  font-syle: normal;
+  letter-spacing: 0.05em;
+}
+
+.testi-attr {
+  font-size: 13px;
+  color: rgba(255,255,255,0.35);
+  margin-top: 4px;
+}
+
+/* ── PRICING ── */
+.pricing {
+  background: var(--parch);
+  padding: 120px 60px;
+  text-align: center;
+  position: relative;
+}
+
+.pricing::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 70%, rgba(155,141,184,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 30%, rgba(142,168,153,0.06) 0%, transparent 50%)
+}
+
+.pricing-inner { position: relative; z-index: 1; }
+
+.pricing h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 4vw, 58px);
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+
+.pricing h2 em { font-style: italic; color: var(--lavend); }
+
+.pricing-lead {
+  font-size: 15px;
+  color: #7A7390;
+  max-width: 420px;
+  margin: 0 auto 64px;
+  line-height: 1.7;
+}
+
+.pricing-card {
+  max-width: 420px;
+  margin: 0 auto;
+  background: var(--ink);
+  borderradius: 6px;
+  padding: 56px 48px;
+  position: relative;
+  box-shadow: 0 40px 80px rgba(28,26,36,0.25);
+}
+
+.pricing-moon {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(155,141,184,0.3);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 32px;
+  position: relative;
+}
+.pricing-moon::before {
+  content: '';
+  position: absolute;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: -8px 0 0 var(--lavend);
+}
+
+.pwas {
+  font-size: 15px;
+  color: rgba(255,255,255,0.2);
+  text-decoration: line-through;
+  margin-bottom: 6px;
+}
+
+.p-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 80px;
+  font-weight: 300;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.p-price sup { font-size: 32px; vertical-align: super; font-weight: 300; }
+
+.p-note {
+  font-size: 12px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.1em;
+  margin-bottom: 44px;
+}
+
+.p-features {
+  list-style: none;
+  text-align: left
+  margin-bottom: 44px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.p-features li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.5;
+}
+
+.p-features li::before {
+  content: '';
+  width: 20px; height: 1px;
+  background: var(--lavend);
+  flex-shrink: 0;
+}
+
+.buy-btn {
+  display: block;
+  width: 100%;
+  padding: 18px;
+  background: transparent;
+  border: 1px solid rgba(155,141,184,0.5);
+  color: var(--lilac);
+  font-faily: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+.buy-btn:hover {
+  background: var(--lavend);
+  border-color: var(--lavend);
+  color: #fff;
+}
+
+.guarantee {
+  margin-top: 20px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.05em;
+}
+
+/* ── FINAL ── */
+.final {
+  background: var(--ink);
+  padding: 160px 60px;
+ text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.final-orb {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(155,141,184,0.1) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.final-inner { position: relative; z-index: 1; }
+
+.final h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(44px, 6vw, 80px);
+  font-weight: 300;
+  line-height: 1.1;
+  coor: #fff;
+  margin-bottom: 28px;
+}
+
+.final h2 em { font-style: italic; color: var(--lilac); }
+
+.final p {
+  font-size: 16px;
+  line-height: 1.85;
+  color: rgba(255,255,255,0.4);
+  max-width: 500px;
+  margin: 0 auto 48px;
+}
+
+.final-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--lilac);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(155,141,184,0.4);
+  padding-bottom: 6px;
+  transition: colr 0.3s, border-color 0.3s;
+}
+.final-cta:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+
+/* ── ANIMATIONS ── */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  nav { padding: 24px 28px; }
+  .for-you-iner,
+  .inside-header { grid-template-columns: 1fr; gap: 40px; }
+  .prompts-grid { grid-template-columns: 1fr; }
+  .chapters-list { grid-template-columns: 1fr; }
+  .testi-trio { flex-direction: column; align-items: center; }
+  .for-you, .prompts, .inside, .testi-solo, .pricing, .final { padding: 80px 28px; }
+  .hero-body { padding: 40px 28px 80px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <!-- Stars -->
+  <div class="stars" id="stars"></div>
+  <div class="orb"></div>
+
+  <nav>
+   <div class="nav-logo">The Quiet Room</div>
+    <a href="#pricing" class="nav-cta">Get the Journal</a>
+  </nav>
+
+  <div class="hero-body">
+    <span class="hero-eyebrow">A journal for those who live inside their own mind</span>
+    <h1 class="hero-title">
+      The Quiet<br/><em>Room</em>
+    </h1>
+    <p class="hero-tagline">52 weeks of prompts made for the inner world of the introvert.</p>
+
+    <div class="pdf-wrap">
+      <div class="pdf-float">
+        <div class="pdf-page-back2"></div>
+        <divclass="pdf-page-back"></div>
+        <div class="pdf-page">
+          <div class="pdf-spine"></div>
+          <div class="pdf-moon"></div>
+          <div class="pdf-title-text">The Quiet<br/>Room</div>
+          <div class="pdf-sub-text">An Introvert's Journal</div>
+          <div class="pdf-lines">
+            <div class="pdf-line"></div>
+            <div class="pdf-line"></div>
+            <div class="pdf-line"></div>
+          </div>
+        </div>
+      </div>
+      <div class="pdf-shadow"></div>
+   </div>
+
+    <a href="#pricing" class="hero-buy-btn">
+      Download the Journal — $19
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16"/></svg>
+    </a>
+    <p class="hero-note">Instant PDF download · 180+ pages · Print or digital</p>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- FOR YOU -->
+<section class="for-you">
+  <div clas="for-you-inner">
+    <div class="for-you-text reveal">
+      <span class="section-eyebrow">This is for you if</span>
+      <h2>The world is loud.<br/>Your soul needs<br/><em>somewhere to land.</em></h2>
+      <p>You process deeply. You feel everything a little more than other people seem to. You've always had a rich inner life — but never quite the right space to explore it.</p>
+      <p>This journal was made for that space.</p>
+    </div>
+    <div class="traits reveal">
+      <div class="trait"><div lass="trait-dot"></div><p>You recharge in solitude and need time alone to feel like yourself again</p></div>
+      <div class="trait"><div class="trait-dot"></div><p>You feel things deeply but struggle to put them into words in the moment</p></div>
+      <div class="trait"><div class="trait-dot"></div><p>You've journaled before but found generic prompts too shallow for how you actually think</p></div>
+      <div class="trait"><div class="trait-dot"></div><p>You carry a lot internally and rarely feel full understood by the people around you</p></div>
+      <div class="trait"><div class="trait-dot"></div><p>You want to understand yourself better — not perform growth, but actually feel it</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMPTS PREVIEW -->
+<section class="prompts">
+  <div class="prompts-inner">
+    <div class="prompts-header reveal">
+      <span class="section-eyebrow" style="color:var(--sage)">A taste of what's inside</span>
+      <h2>Prompts that go where<br/><em>small talk never does.</e></h2>
+      <p>Each prompt is a doorway into something real. No surface-level questions. No toxic positivity. Just honest, quiet exploration.</p>
+    </div>
+    <div class="prompts-grid">
+      <div class="prompt-card reveal">
+        <div class="prompt-num">01</div>
+        <span class="prompt-section">Self-awareness</span>
+        <p class="prompt-q">Where do you go inside yourself when the room gets too loud?</p>
+      </div>
+      <div class="prompt-card reveal">
+        <div class="prompt-num">02</iv>
+        <span class="prompt-section">Relationships</span>
+        <p class="prompt-q">Who in your life has ever made silence feel completely comfortable?</p>
+      </div>
+      <div class="prompt-card reveal">
+        <div class="prompt-num">03</div>
+        <span class="prompt-section">Energy</span>
+        <p class="prompt-q">What drained you this week that you'd never admit out loud?</p>
+      </div>
+      <div class="prompt-card reveal">
+        <div class="prompt-num">04</div>
+        <span clas="prompt-section">Longing</span>
+        <p class="prompt-q">What kind of connection have you always wanted but never asked for?</p>
+      </div>
+      <div class="prompt-card reveal">
+        <div class="prompt-num">05</div>
+        <span class="prompt-section">Boundaries</span>
+        <p class="prompt-q">What have you kept saying yes to that your whole body is saying no to?</p>
+      </div>
+      <div class="prompt-card reveal">
+        <div class="prompt-num">06</div>
+        <span class="prompt-secion">Identity</span>
+        <p class="prompt-q">Which version of yourself do you show the world — and which one stays hidden?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INSIDE -->
+<section class="inside" id="inside">
+  <div class="inside-inner">
+    <div class="inside-header">
+      <div class="reveal">
+        <span class="section-eyebrow">The full journal</span>
+        <h2>52 weeks.<br/>8 chapters.<br/><em>One honest year.</em></h2>
+      </div>
+      <p class="reveal">Structured a a full year of reflection, each chapter takes you deeper into a different dimension of your inner world — at a pace that respects how introverts actually process.</p>
+    </div>
+    <div class="chapters-list">
+      <div class="chapter reveal"><span class="ch-num">I</span><div class="ch-info"><strong>The Inner Landscape</strong><span>Mapping your emotional and mental world</span></div></div>
+      <div class="chapter reveal"><span class="ch-num">II</span><div class="ch-info"><strong>Energy & Solitude</srong><span>Understanding what drains and restores you</span></div></div>
+      <div class="chapter reveal"><span class="ch-num">III</span><div class="ch-info"><strong>Quiet Relationships</strong><span>Depth over breadth — how you truly connect</span></div></div>
+      <div class="chapter reveal"><span class="ch-num">IV</span><div class="ch-info"><strong>The Mind That Never Stops</strong><span>Overthinking, rumination, and how to work with it</span></div></div>
+      <div class="chapter reveal"><span clas="ch-num">V</span><div class="ch-info"><strong>What You Carry</strong><span>Exploring the weight you rarely speak about</span></div></div>
+      <div class="chapter reveal"><span class="ch-num">VI</span><div class="ch-info"><strong>Boundaries as Kindness</strong><span>Saying less — and meaning more</span></div></div>
+      <div class="chapter reveal"><span class="ch-num">VII</span><div class="ch-info"><strong>The Creative Inner World</strong><span>Imagination, ideas, and the life inside your mind</span>/div></div>
+      <div class="chapter reveal"><span class="ch-num">VIII</span><div class="ch-info"><strong>Coming Home to Yourself</strong><span>Wholeness, not performance</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testi-solo">
+  <blockquote class="reveal">
+    I've never felt so understood by a book — let alone a journal. It's like it was written for the exact person I've always been but never had words for.
+  </blockquote>
+  <div class="testi-attr reveal">—N. Kwame, 31 · Writer, Accra</div>
+
+  <div class="testi-trio">
+    <div class="testi-mini reveal">
+      <p>I cried on page 3. Legitimately. No journal has ever asked me anything this real before.</p>
+      <cite>— Priya S., teacher</cite>
+    </div>
+    <div class="testi-mini reveal">
+      <p>I thought I knew myself. Two months in and I'm discovering things I'd buried for years.</p>
+      <cite>— David L., engineer</cite>
+    </div>
+    <div class="testi-mini reveal">
+      <p>This isn't a journal. It' therapy with better questions and no waiting room.</p>
+      <cite>— Tara M., designer</cite>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="pricing-inner">
+    <span class="section-eyebrow reveal" style="color:var(--lavend)">Your investment</span>
+    <h2 class="reveal">One quiet ritual.<br/><em>Yours for life.</em></h2>
+    <p class="pricing-lead reveal">A single-payment PDF you own forever. Print it, use it digitally, return to it whenever you ned a place to land.</p>
+
+    <div class="pricing-card reveal">
+      <div class="pricing-moon"></div>
+      <div class="p-was">$39</div>
+      <div class="p-price"><sup>$</sup>19</div>
+      <p class="p-note">One-time · Instant download · Yours forever</p>
+      <ul class="p-features">
+        <li>180+ pages of guided prompts</li>
+        <li>52-week structure (1 chapter per 6–7 weeks)</li>
+        <li>Print-ready + digital-optimized layouts</li>
+        <li>Monthly moon cycle reflection pages</li>
+       <li>Blank "open pages" for free writing</li>
+        <li>All future editions included</li>
+      </ul>
+      <button class="buy-btn" onclick="alert('Connect your Gumroad, Stripe, or payment link here.')">
+        Download The Quiet Room
+      </button>
+      <p class="guarantee">30-day refund if it's not for you. No questions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="final">
+  <div class="final-orb"></div>
+  <div class="final-inner">
+    <h2 class="reveal">You've spent your wole life<br/>listening to the world.<br/><em>It's time to listen to yourself.</em></h2>
+    <p class="reveal">The Quiet Room exists so that the deepest parts of you finally have somewhere to go. Not to be fixed. Just to be heard.</p>
+    <a href="#pricing" class="final-cta reveal">
+      Begin your year of reflection
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
+
+<script>
+  //Generate stars
+  const container = document.getElementById('stars');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.classList.add('star');
+    const size = Math.random() * 2 + 0.5;
+    s.style.cssText = `
+      width: ${size}px;
+      height: ${size}px;
+      top: ${Math.random() * 100}%;
+      left: ${Math.random() * 100}%;
+      --lo: ${(Math.random() * 0.15).toFixed(2)};
+      --hi: ${(Math.random() * 0.5 + 0.3).toFixed(2)};
+      --d: ${(Math.random() * 4 + 2).tFixed(1)}s;
+      --delay: ${(Math.random() * 4).toFixed(1)}s;
+    `;
+    container.appendChild(s);
+  }
+
+  // Scroll reveal
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
