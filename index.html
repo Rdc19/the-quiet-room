@@ -163,6 +163,45 @@ section{
   section{padding:60px 20px}
 }
 </style>
+  <style>
+/* Smooth reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+
+.reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Button hover glow */
+.btn {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(155,141,184,0.3);
+}
+
+/* subtle gradient glow */
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(155,141,184,0.3), transparent);
+  opacity: 0;
+  transition: 0.4s;
+}
+
+.btn:hover::after {
+  opacity: 1;
+}
+</style>
 </head>
 
 <body>
